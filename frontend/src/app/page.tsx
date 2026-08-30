@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Home() {
   const [settled, setSettled] = useState(false);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const timer = setTimeout(() => setSettled(true), 1600);
@@ -31,14 +34,39 @@ export default function Home() {
         Don&apos;t forget what you learned. Stay sharp for your OAs.
       </p>
 
-      <Link
-        href="/login"
-        className={`absolute right-6 top-5 rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black transition-opacity delay-300 duration-500 hover:bg-zinc-200 ${
+      <div
+        className={`absolute right-6 top-5 flex items-center gap-3 transition-opacity delay-300 duration-500 ${
           settled ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        Login
-      </Link>
+        {status === "authenticated" ? (
+          <>
+            {session.user?.image && (
+              <Image
+                src={session.user.image}
+                alt={session.user.name ?? "Profile"}
+                width={32}
+                height={32}
+                className="rounded-full"
+              />
+            )}
+            <span className="text-sm font-medium">{session.user?.name}</span>
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="cursor-pointer text-sm text-foreground/60 underline hover:text-foreground"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link
+            href="/login"
+            className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black hover:bg-zinc-200"
+          >
+            Login
+          </Link>
+        )}
+      </div>
     </div>
   );
 }
