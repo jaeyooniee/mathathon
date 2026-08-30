@@ -27,7 +27,7 @@ export default function Home() {
       </h1>
 
       <p
-        className={`absolute left-1/2 top-1/2 max-w-md -translate-x-1/2 translate-y-10 px-6 text-center text-lg text-foreground/70 transition-opacity duration-500 ${
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-10 px-6 text-center text-lg text-foreground/70 transition-opacity duration-500 ${
           settled ? "opacity-0" : "opacity-100"
         }`}
       >
